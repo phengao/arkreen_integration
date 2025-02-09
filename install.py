@@ -41,15 +41,21 @@ def main():
 arkreen:
 
 panel_custom:
-    - name: device-config-panel
-      # url_path needs to be unique for each panel_custom config
-      url_path: redirect-server-controls
-      sidebar_title: device-config-panel
-      sidebar_icon: mdi:server
-      module_url: /local/device-config-panel.js
-      config:
-        # Data you want to make available to panel
-        hello: world
+  - name: device-config-panel
+    # url_path needs to be unique for each panel_custom config
+    url_path: redirect-server-controls
+    sidebar_title: device-config-panel
+    sidebar_icon: mdi:server
+    module_url: /local/device-config-panel.js
+    config:
+      # Data you want to make available to panel
+      hello: world
+
+  - name: arkreen-plant-panel
+    sidebar_title: "Arkreen Plant"
+    sidebar_icon: mdi:solar-power-variant-outline
+    url_path: arkreen-plant-panel
+    module_url: /local/arkreen-plant-panel.js  
 """
 
     if os.path.exists(configuration_yaml_path):
