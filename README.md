@@ -1,5 +1,5 @@
 # Arkreen_integration
-hello, Arkreen ha
+Arkreen_integration,  It is a user-defined home assistant integration used to manage Arkreen plants
 # How to use:
 ## 1. Preconditions
 ###  1.1 The latest version of home assistant core has been installed on the Linux system, link: https://github.com/home-assistant/core
