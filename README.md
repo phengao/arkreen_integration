@@ -2,10 +2,14 @@
 Arkreen_integration,  It is a user-defined home assistant integration used to manage Arkreen plants
 # How to use:
 ## 1. Preconditions
-###  1.1 The latest version of home assistant core has been installed on the Linux system, link: https://github.com/home-assistant/core
+### 1.1 Installing Home Assistant Core
+The latest version of home assistant core has been installed on the Linux system, link: https://github.com/home-assistant/core
+
 Install and run home assistant core reference link: https://developers.home-assistant.io/docs/development_environment
-### 1.2 Relevant energy devices have been added to the home assistant application, such as photovoltaic equipment, inverters, energy meters, etc
-### 1.3 You have completed the application for Arkreen plant CSP power station and received confirmation information, obtaining the registration code for Arkreen plant CSP power station
+### 1.2 Adding power generation equipment
+Related energy devices have been added to the home assistant application, such as photovoltaic equipment, inverters, energy meters, etc
+### 1.3 Application for power station
+You have completed the application for mytest plant CSP power station and received confirmation information, obtaining the registration code for mytest plant CSP power station
 
 
 ## 2. Install Arkreen_integration
