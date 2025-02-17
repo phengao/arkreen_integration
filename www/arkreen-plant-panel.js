@@ -503,7 +503,7 @@ class ArkreenPlantPanel extends LitElement {
         </div><br>
         <div style="display:flex;justify-content:center;">
           <label style="flex: 0 1 calc(25% - 10px);">Owner Address :</label>
-          <input type="text" name="ownerAddress" id="ownerAddress" value="0x259df9c21d8a7F716C26dF1259D7FDCab96E5689" style="flex: 0 1 calc(33.333% - 30px);">
+          <input type="text" name="ownerAddress" id="ownerAddress" value="0x310df9c21d8a7F716C26dF1259D7FDCab96E5689" style="flex: 0 1 calc(33.333% - 30px);">
         </div><br>
         <div style="display:flex;justify-content:center;">
           <label style="flex: 0 1 calc(25% - 10px);">Country/Region :</label>
