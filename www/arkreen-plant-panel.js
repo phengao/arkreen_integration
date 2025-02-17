@@ -358,7 +358,7 @@ class ArkreenPlantPanel extends LitElement {
     }
   }
 
-  async handleFormActiveSubmit(event) {
+  async handleFormAddPlant(event) {
     event.preventDefault(); // Prevent the default form submission behavior
   
     this.submitting = true;  // Set submitting state to true
@@ -406,48 +406,52 @@ class ArkreenPlantPanel extends LitElement {
       await this.hass.callService('arkreen', 'save_config', config);
 
       console.log('Configuration saved successfully', config);
-      this.resultMessage = 'Active successful';
+      this.resultMessage = 'Successfully added plant';
     } catch (error) {
       console.error('Failed to save configuration:', error);
       console.error('Error calling service or polling for result:', error);
-      this.resultMessage = 'Submission failed';
+      this.resultMessage = 'Add plant failed';
     } finally {
       this.submitting = false;  // Reset submitting state regardless of success or failure
       this.requestUpdate();  // Force re-render to update button state
     }
   }  
 
+//      ${this.page === 'apply' ? this._renderApplyForm() : ''}
+
   render() {
     return html`
-      <h1>Arkreen Plant:</h1>
+      <h1>Arkreen Integration:</h1>
+
 
       ${this.page === 'main' ? this._renderMainPage() : ''}
+      
+      ${this.page === 'addPlant' ? this._renderAddPlantForm() : ''}
 
-      ${this.page === 'apply' ? this._renderApplyForm() : ''}
-
-      ${this.page === 'activate' ? this._renderActivateForm() : ''}
     `;
   }
 
   _renderMainPage() {
     return html`
-      <p>Currently owned Arkreen Plants</p>
+      <p>Integrate your solar PV plant on Home Assistant to Arkreen:</p>
+      <button @click=${() => this._showPage('addPlant')}>Add Plant</button>
+      <p>Your Plants integrated in Arkreen:</p>
       <hr style="width: 100%;">
       ${this.plants.length > 0 ? html`
           <table style="border-collapse: collapse; border: 1px solid black;">
               <thead>
                   <tr style="border: 1px solid black;">
                       <th style="border: 1px solid black;">name</th>
-                      <th style="border: 1px solid black;">plant_id</th>
-                      <th style="border: 1px solid black;">owner</th>
-                      <th style="border: 1px solid black;">entity_energy</th>
-                      <th style="border: 1px solid black;">entity_power</th>
+                      <th style="border: 1px solid black;">plant id</th>
+                      <th style="border: 1px solid black;">wallet address</th>
+                      <th style="border: 1px solid black;">energy sensor</th>
+                      <th style="border: 1px solid black;">power sensor</th>
                   </tr>
               </thead>
               <tbody>
                  ${this.plants.map(plant => html`
                       <tr style="border: 1px solid black;">
-                         <td style="border: 1px solid black;">${plant.name}</td>
+                         <td style="border: 1px solid black;">${plant.name }</td>
                          <td style="border: 1px solid black;">${plant.plant_id}</td>
                          <td style="border: 1px solid black;">${plant.owner}</td>
                          <td style="border: 1px solid black;">${plant.entity_energy}</td>
@@ -458,11 +462,9 @@ class ArkreenPlantPanel extends LitElement {
           </table>
       ` : html`<p>No plant information available.</p>`}
       <hr>
-      <button @click=${() => this._showPage('apply')}>Apply for Plant</button> <p>Fill in the application form for a new plant.</p>
-      <button @click=${() => this._showPage('activate')}>Activate Plant</button>
-      <p>Activate an applied plant after receiving approval.</p>
     `;
   }
+//      <button @click=${() => this._showPage('apply')}>Apply for Plant</button> <p>Fill in the application form for a new plant.</p>
 
   _renderApplyForm() {
     return html`
@@ -501,7 +503,7 @@ class ArkreenPlantPanel extends LitElement {
         </div><br>
         <div style="display:flex;justify-content:center;">
           <label style="flex: 0 1 calc(25% - 10px);">Owner Address :</label>
-          <input type="text" name="ownerAddress" id="ownerAddress" value="0x259df9c21d8a7F716C26dF1259D7FDCab96E722E" style="flex: 0 1 calc(33.333% - 30px);">
+          <input type="text" name="ownerAddress" id="ownerAddress" value="0x259df9c21d8a7F716C26dF1259D7FDCab96E5689" style="flex: 0 1 calc(33.333% - 30px);">
         </div><br>
         <div style="display:flex;justify-content:center;">
           <label style="flex: 0 1 calc(25% - 10px);">Country/Region :</label>
@@ -528,13 +530,21 @@ class ArkreenPlantPanel extends LitElement {
     `;
   }
 
-  _renderActivateForm() {
+  _renderAddPlantForm() {
     return html`
-      <p>Activate an applied plant after receiving approval</p>
+      <p>Select a solar PV plant device and add to Arkreen</p>
       <hr style="width: 100%;">
-      <form id="activateForm" @submit=${this.handleFormActiveSubmit} style="display:flex;flex-direction:column;">
+      <form id="addPlantForm" @submit=${this.handleFormAddPlant} style="display:flex;flex-direction:column;">
         <div style="display:flex;justify-content:center;">
-          <label style="flex: 0 1 calc(25% - 10px);">Select Device :</label>
+          <label style="flex: 0 1 calc(25%);">Plant ID(Contact Arkreen Team for your Plant ID	) :</label>
+          <input type="text" name="plant_id" id="plant_id" style="flex: 0 1 calc(33.333% - 30px);">
+        </div><br>
+        <div style="display:flex;justify-content:center;">
+          <label style="flex: 0 1 calc(25%);">Wallet Address on Polygon :</label>
+          <input type="text" name="owner" id="owner" value="0x259df9c21d8a7F716C26dF1259D7FDCab96E722E" style="flex: 0 1 calc(33.333% - 30px);">
+        </div><br>
+        <div style="display:flex;justify-content:center;">
+          <label style="flex: 0 1 calc(25%);">Select Device :</label>
           <select name="device" id="device" style="flex: 0 1 calc(33.333% - 30px);" @change="${(event) => this.handleChange(event)}">
             <option value="">Select a device</option>
             ${this.devices.map(deviceName => html`
@@ -543,7 +553,7 @@ class ArkreenPlantPanel extends LitElement {
           </select>
         </div><br>
         <div style="display:flex;justify-content:center;">
-          <label style="flex: 0 1 calc(25% - 10px);">Select Energy Entity :</label>
+          <label style="flex: 0 1 calc(25%);">Select Energy Sensor :</label>
           <select name="entity_energy" id="entity_energy" style="flex: 0 1 calc(33.333% - 30px);">
             <option value="">Select a energySensor</option>
             ${this.sensorsEnergyByDevice.map(deviceName => html`
@@ -552,7 +562,7 @@ class ArkreenPlantPanel extends LitElement {
           </select>
         </div><br>
         <div style="display:flex;justify-content:center;">
-          <label style="flex: 0 1 calc(25% - 10px);">Select Power Entity :</label>
+          <label style="flex: 0 1 calc(25%);">Select Power Sensor :</label>
           <select name="entity_power" id="entity_power" style="flex: 0 1 calc(33.333% - 30px);">
             <option value="">Select a powerSensor</option>
             ${this.sensorsPowerByDevice.map(deviceName => html`
@@ -560,18 +570,10 @@ class ArkreenPlantPanel extends LitElement {
             `)}
           </select>
         </div><br>
-        <div style="display:flex;justify-content:center;">
-          <label style="flex: 0 1 calc(25% - 10px);">Plant ID :</label>
-          <input type="text" name="plant_id" id="plant_id" style="flex: 0 1 calc(33.333% - 30px);">
-        </div><br>
-        <div style="display:flex;justify-content:center;">
-          <label style="flex: 0 1 calc(25% - 10px);">Owner Address :</label>
-          <input type="text" name="owner" id="owner" value="0x259df9c21d8a7F716C26dF1259D7FDCab96E722E" style="flex: 0 1 calc(33.333% - 30px);">
-        </div><br>
         <hr style="width: 100%;">
         <div style="display:flex;justify-content:space-between;">
           <button @click=${() => this._showPage('main')}  style="width: 150px;">Back</button>
-          <button type="submit" style="width: 150px;">Activate Plant</button>
+          <button type="submit" style="width: 150px;">Add Plant</button>
         </div><br>
         <!-- show response -->
         ${this.resultMessage ? html`<p>${this.resultMessage}</p>` : ''}        

@@ -225,7 +225,7 @@ async def async_setup(hass, config):
     # Initialize storage
     
     store = Store(hass, STORAGE_VERSION, STORAGE_KEY)
-    await store.async_save({});
+    #await store.async_save({});
     
     # Load existing data from storage or initialize with empty dict
     data = await store.async_load() or {}
@@ -261,7 +261,6 @@ async def async_setup(hass, config):
             device += "_" + current_time_stamp  # 修改设备名称为device+当前时标
             _LOGGER.info(f"Device {original_device} already exists, renaming to {device}")
 
-        hass.states.async_set("arkreen.arkreen", "Arkreen active {current_time_stamp}")
     
         # Save new configuration to data
         hass.data[DOMAIN]['data'][device] = {
@@ -521,9 +520,10 @@ async def arkreen_plant_timed_update(hass):
         _LOGGER.info(f"plant_id for {DOMAIN}: {plant_id}")
         data = plant_id['data']
         if data:
-
-            for device, details in data.items():
-            
+            items_list = list(data.items())
+            #for device, details in data.items():
+            for index in range(len(items_list)):
+                device, details = items_list[index]
                 id = device.split('-', 1)[1]
                 plant_id = details.get('plant_id')
                 owner = details.get('owner')
@@ -542,8 +542,9 @@ async def arkreen_plant_timed_update(hass):
                   power = hass.states.get(entity_power)
                 if entity_energy:
                   energy = hass.states.get(entity_energy)
-                  print(f"  power: {power.state}, energy: {energy.state}")
-                  #await send_rpc_data(hass, plant_id, device, power.state, energy.state)
+                  print(f"  {plant_id} power: {power.state}, energy: {energy.state}")
+                  dev = device.replace('-', '_').replace(':', '_').replace(' ','_')
+                  hass.states.async_set(f"arkreen.{dev}", f"{power.state} W, {energy.state} kWh")
                   await send_push_data(hass, plant_id, owner, power.state, energy.state)
                   _LOGGER.info(f"  sleep 0")
                   await asyncio.sleep(0.5)
