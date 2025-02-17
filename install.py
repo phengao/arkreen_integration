@@ -42,7 +42,7 @@ arkreen:
 
 panel_custom:
   - name: arkreen-plant-panel
-    sidebar_title: "Arkreen Plant"
+    sidebar_title: "Arkreen Integration"
     sidebar_icon: mdi:solar-power-variant-outline
     url_path: arkreen-plant-panel
     module_url: /local/arkreen-plant-panel.js  
